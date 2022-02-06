@@ -13,6 +13,27 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        ProcessThrust();
+        ProcessRotation();
     }
+
+void ProcessThrust()
+{
+    if(Input.GetKey(KeyCode.UpArrow)==true)
+    {
+     Debug.Log("Spacja") ;  
+    }
+}
+void ProcessRotation()
+{
+ if(Input.GetKey(KeyCode.LeftArrow)==true)
+    {
+     Debug.Log("lewa") ;  
+    }
+ if(Input.GetKey(KeyCode.RightArrow)==true)
+    {
+     Debug.Log("prawa") ;  
+    }
+}
+
 }
