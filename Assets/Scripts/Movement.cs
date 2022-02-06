@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public Rigidbody rocketRigidbody;
+    [SerializeField]float rocketLiftingSpeed=1.2f;
+    private int deltaTimeValueComplement=1000;
+    // [SerializeField] float rocketSteeringSpeed=0.5f;
+        void Start()
     {
-        
+        rocketRigidbody=GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -21,18 +25,22 @@ void ProcessThrust()
 {
     if(Input.GetKey(KeyCode.UpArrow)==true)
     {
-     Debug.Log("Spacja") ;  
+     rocketRigidbody.AddRelativeForce( Vector3.up *rocketLiftingSpeed *Time.deltaTime* deltaTimeValueComplement );
     }
 }
 void ProcessRotation()
 {
  if(Input.GetKey(KeyCode.LeftArrow)==true)
     {
-     Debug.Log("lewa") ;  
+
+    //rocketRigidbody.AddRelativeForce(-rocketSteeringSpeed,0,0);
+     
+
     }
  if(Input.GetKey(KeyCode.RightArrow)==true)
     {
-     Debug.Log("prawa") ;  
+     //rocketRigidbody.AddRelativeForce(rocketSteeringSpeed,0,0);
+    
     }
 }
 
