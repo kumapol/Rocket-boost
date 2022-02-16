@@ -5,49 +5,67 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
 
-    public Rigidbody rocketRigidbody;
-    [SerializeField]float rocketLiftingSpeed=1.2f;
+ Rigidbody rocketRigidbody;
+  AudioSource rocketBoost;
+
+    [SerializeField]float rocketLiftingSpeed=1.3f;
     private int deltaTimeValueComplement=1000;
-     [SerializeField] float rocketSteeringSpeed=0.5f;
+     [SerializeField] float rocketSteeringSpeed=0.2f;
         void Start()
     {
         rocketRigidbody=GetComponent<Rigidbody>();
+        rocketBoost=GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
+         rocketRigidbody.transform.position= new Vector3(transform.position.x, transform.position.y, 0); // out of the course
         ProcessThrust();
         ProcessRotation();
-        CantRotate();
+   
     }
 
 void ProcessThrust()
 {
     if(Input.GetKey(KeyCode.UpArrow)==true)
     {
+     
+     
      rocketRigidbody.AddRelativeForce( Vector3.up *rocketLiftingSpeed *Time.deltaTime* deltaTimeValueComplement );
+      if(!rocketBoost.isPlaying)
+      {
+      rocketBoost.Play();
+      }
+     
+    }
+    else
+    {
+rocketBoost.Stop();
+
     }
 }
 void ProcessRotation()
 {
  if(Input.GetKey(KeyCode.LeftArrow)==true)
+        {
+            ApplyRotation(1);
+        }
+        else if(Input.GetKey(KeyCode.RightArrow)==true)
     {
-
-  
-       rocketRigidbody.AddTorque(0,0,rocketSteeringSpeed);
-
-    }
- if(Input.GetKey(KeyCode.RightArrow)==true)
-    {
-   
-    rocketRigidbody.AddTorque(0,0,-rocketSteeringSpeed);
+         ApplyRotation(-1);
     }
 }
-void CantRotate()
-{
-   Vector3 wektorBezpieczenstwa = transform.rotation.eulerAngles;
-    transform.rotation = Quaternion.Euler(wektorBezpieczenstwa.x,90, 0);
-}
 
+    private void ApplyRotation(int direction)
+    {
+        rocketRigidbody.freezeRotation=true;
+        transform.Rotate(Vector3.forward * rocketSteeringSpeed * Time.deltaTime * deltaTimeValueComplement* direction);
+        
+    
+     rocketRigidbody.constraints= RigidbodyConstraints.FreezeRotationX | 
+            RigidbodyConstraints.FreezeRotationY | 
+            RigidbodyConstraints.FreezePositionZ; // out of the course/ will freez rotation after player change  
+
+    }
 }
